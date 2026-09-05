@@ -2,10 +2,8 @@ import os
 
 import joblib
 import numpy as np
-import torch
 
 from backend.config import FEATURES, LEGACY_MODEL_PATH, LEGACY_SCALER_PATH, MODEL_PATH, SCALER_PATH
-from drl.agent import DDQNAgent
 from drl.config import ACTION_SIZE, MODEL_FILE, SCALER_FILE, STATE_SIZE
 
 _agent = None
@@ -32,6 +30,8 @@ def _load_classifier():
                 with open(path, "rb") as handle:
                     model = pickle.load(handle)
                 return model
+            from drl.agent import DDQNAgent
+
             _agent = DDQNAgent(STATE_SIZE, ACTION_SIZE)
             _agent.load(path)
             return _agent
@@ -87,6 +87,8 @@ def predict_state(payload: dict):
             }
 
         if hasattr(_agent, "act"):
+            import torch
+
             state = X_scaled[0]
             action = _agent.act(state, greedy=True)
             state_t = torch.FloatTensor(state).unsqueeze(0).to(_agent.device)
