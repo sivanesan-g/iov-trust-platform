@@ -1,0 +1,14 @@
+flask
+flask-cors
+numpy
+scikit-learn
+joblib
+torch
+paho-mqtt
+PyJWT
+python-dotenv
+requests
+SQLAlchemy
+psycopg2-binary
+web3
+gunicorn

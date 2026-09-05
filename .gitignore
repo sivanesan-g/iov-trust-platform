@@ -1,0 +1,30 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local runtime state
+data/*.db
+data/*.json
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+# Local build and editor files
+.vscode/
+.idea/
+
+# Node/tool caches if frontend tooling is added
+node_modules/

@@ -1,0 +1,190 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "vehicleId",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "trustScore",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "predictionLabel",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "confidence",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "shard",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "status",
+						"type": "string"
+					}
+				],
+				"name": "TrustUpdated",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "vehicleId",
+						"type": "string"
+					}
+				],
+				"name": "getHistoryCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "vehicleId",
+						"type": "string"
+					}
+				],
+				"name": "getLatestTrust",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"name": "latestTrustScore",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "vehicleId",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "trustScore",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "predictionLabel",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "confidence",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "shard",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "status",
+						"type": "string"
+					}
+				],
+				"name": "updateTrust",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"TrustRegistry.sol": "TrustRegistry"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"TrustRegistry.sol": {
+			"keccak256": "0xe04162fe6a955cf49c1b366949329685442ff72f09e0a68f5dc89d588f2b40c1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://63428cc1cd20b17178f99057e5f42b9e4c8c6e32e7ce5fd6969401145a13baf7",
+				"dweb:/ipfs/QmfWQ6EiH1ATxXrAWkAu7LCpD9BEQWfgnqGHV5Jt7f6ye6"
+			]
+		}
+	},
+	"version": 1
+}

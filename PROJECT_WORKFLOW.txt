@@ -1,0 +1,111 @@
+IoV Trust Project - Complete Explanation
+=====================================
+
+Overview
+--------
+This project is a local Internet-of-Vehicles (IoV) trust monitoring system.
+It combines:
+- a machine learning inference pipeline for vehicle behavior prediction,
+- a trust scoring engine for evaluating vehicle behavior over time,
+- a local blockchain ledger for recording events,
+- a web dashboard for viewing trust and chain data,
+- and local SQLite databases for persisting trust history, events, and blockchain state.
+
+Main Goal
+---------
+The system receives vehicle telemetry features, predicts whether the vehicle behavior is normal or malicious, updates a trust score, and records the event locally for later inspection.
+
+Project Structure
+-----------------
+- app.py
+  The main Flask application. It exposes the web dashboard and API endpoints.
+
+- backend/
+  Contains the core services:
+  - trust_service.py: calculates and stores trust scores/history.
+  - cloud_store.py: saves prediction events to a local SQLite database.
+  - ethereum_service.py: logs trust updates to a local Ethereum/Ganache environment.
+  - rsu.py: verifies incoming telemetry using simple RSU safety rules.
+
+- blockchain/
+  Contains the local sharded blockchain implementation:
+  - ledger.py: stores blocks and persists them to disk.
+  - agsb.py: adaptive graph sharding logic.
+  - dpos.py: validator selection logic.
+
+- drl/
+  Contains the deep reinforcement learning inference logic used for prediction.
+
+- iov_admin_dashboard/
+  The frontend web UI served by Flask.
+
+- models/
+  Contains the trained model files required for prediction.
+
+- data/
+  Local storage directory for SQLite and JSON persistence files.
+
+Workflow
+--------
+1. Client sends vehicle telemetry to the Flask API.
+2. The RSU verification layer checks whether the packet looks physically plausible.
+3. The trust service loads the existing trust state for that vehicle.
+4. The model predicts whether the behavior is Normal or Malicious/Attack.
+5. The trust score is updated based on the prediction and prior history.
+6. A validator is selected for the transaction.
+7. The event is sent to the local Ethereum/Ganache environment if available.
+8. The event is added to the local sharded blockchain ledger.
+9. The event and trust state are saved in local SQLite databases.
+10. The dashboard and API can be used to inspect trust, blockchain, and saved events.
+
+Trust Scoring Logic
+-------------------
+- Normal predictions gradually increase trust.
+- Malicious or attack predictions reduce trust.
+- Repeated attacks cause stronger penalties.
+- The trust score is clamped between 0 and 1.
+
+Persistence
+-----------
+The project stores data locally so it survives restarts:
+- trust state: stored in data/trust_state.db
+- prediction events: stored in data/trust_events.db
+- blockchain ledger: stored in data/ledger_state.json
+
+How to Run
+----------
+1. Install Python dependencies:
+   pip install -r requirements.txt
+
+2. Make sure the trained model files exist in the models/ folder.
+
+3. Start Ganache locally if blockchain logging is needed.
+
+4. Run the app:
+   python app.py
+
+5. Open the web dashboard:
+   http://127.0.0.1:5000/
+
+Useful API Endpoints
+--------------------
+- GET /api/health
+  Checks backend health.
+
+- POST /api/predict
+  Sends telemetry and returns prediction, trust score, and ledger information.
+
+- GET /api/trust/<vehicle_id>
+  Returns the current trust score and trust history for a vehicle.
+
+- GET /api/chain
+  Returns the blockchain ledger snapshot.
+
+- GET /api/database
+  Returns the saved local prediction events.
+
+Notes
+-----
+- This project is designed for local development and testing.
+- It does not depend on external cloud storage.
+- It uses local persistence files so the app can retain trust and blockchain history across restarts.

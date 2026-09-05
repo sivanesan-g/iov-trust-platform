@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IoV Admin Control & Monitoring Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-badge">IoV</div>
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p>Trust • Blockchain • Ethereum • MongoDB</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-btn active" data-section="overview">Overview</button>
+        <button class="nav-btn" data-section="predict">Predict</button>
+        <button class="nav-btn" data-section="trust">Trust Lookup</button>
+        <button class="nav-btn" data-section="monitor">Monitor</button>
+        <button class="nav-btn" data-section="chain">Blockchain</button>
+      </nav>
+
+      <div class="api-config">
+        <label for="apiBase">API Base URL</label>
+        <input id="apiBase" type="text" value="http://127.0.0.1:5000" />
+        <button id="saveApiBase" class="secondary-btn">Save API URL</button>
+      </div>
+
+      <div class="quick-status">
+        <h3>Backend Status</h3>
+        <div id="healthDot" class="status-dot status-idle"></div>
+        <p id="healthText">Not checked</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2>IoV Trust Monitoring Console</h2>
+          <p>Admin control panel for prediction, trust updates, shard tracking, and chain inspection.</p>
+        </div>
+        <div class="topbar-actions">
+          <button id="refreshAll" class="primary-btn">Refresh Dashboard</button>
+          <button id="loadDemo" class="secondary-btn">Load Demo JSON</button>
+        </div>
+      </header>
+
+      <section id="overview" class="section active">
+        <div class="grid stats-grid">
+          <div class="card stat-card">
+            <span class="label">Service Health</span>
+            <strong id="healthStatus">Unknown</strong>
+            <small id="healthMessage">No data yet</small>
+          </div>
+          <div class="card stat-card">
+            <span class="label">Ethereum</span>
+            <strong id="ethereumStatus">Unknown</strong>
+            <small>Smart contract logging state</small>
+          </div>
+          <div class="card stat-card">
+            <span class="label">Active Vehicles</span>
+            <strong id="vehicleCount">0</strong>
+            <small>From shard mapping</small>
+          </div>
+          <div class="card stat-card">
+            <span class="label">Cross-Shard Events</span>
+            <strong id="crossShardCount">0</strong>
+            <small>Recent transfer records</small>
+          </div>
+        </div>
+
+        <div class="grid two-col">
+          <div class="card">
+            <div class="card-header">
+              <h3>Shard Load</h3>
+              <span class="sub">Live view from /api/shards</span>
+            </div>
+            <div id="shardBars" class="bars"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Architecture</h3>
+              <span class="sub">Current backend description</span>
+            </div>
+            <div id="architectureBox" class="kv-list"></div>
+          </div>
+        </div>
+
+        <div class="grid two-col">
+          <div class="card">
+            <div class="card-header">
+              <h3>Recent Cross-Shard Transfers</h3>
+              <span class="sub">Adaptive rebalance activity</span>
+            </div>
+            <div id="transferTableWrap" class="table-wrap"></div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3>Latest Prediction</h3>
+              <span class="sub">Most recent /api/predict response</span>
+            </div>
+            <pre id="latestPrediction" class="code-box">No prediction yet.</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="predict" class="section">
+        <div class="grid two-col">
+          <div class="card">
+            <div class="card-header">
+              <h3>JSON Input</h3>
+              <span class="sub">Send vehicle payload to /api/predict</span>
+            </div>
+            <label class="field-label" for="vehicleJson">Request Body</label>
+            <textarea id="vehicleJson" class="json-input"></textarea>
+            <div class="inline-actions">
+              <button id="formatJson" class="secondary-btn">Format JSON</button>
+              <button id="sendPredict" class="primary-btn">Send Prediction</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Prediction Result</h3>
+              <span class="sub">Trust, shard, validator, DB, Ethereum</span>
+            </div>
+            <pre id="predictResult" class="code-box">No request sent yet.</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="trust" class="section">
+        <div class="grid two-col">
+          <div class="card">
+            <div class="card-header">
+              <h3>Vehicle Trust Lookup</h3>
+              <span class="sub">Fetch /api/trust/&lt;vehicle_id&gt;</span>
+            </div>
+            <label class="field-label" for="vehicleIdInput">Vehicle ID</label>
+            <input id="vehicleIdInput" class="text-input" type="text" placeholder="veh_1" />
+            <button id="fetchTrust" class="primary-btn">Get Trust Status</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Trust Result</h3>
+              <span class="sub">Current score and status</span>
+            </div>
+            <pre id="trustResult" class="code-box">No vehicle checked yet.</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="monitor" class="section">
+        <div class="grid two-col">
+          <div class="card">
+            <div class="card-header">
+              <h3>Vehicle ↔ Shard Mapping</h3>
+              <span class="sub">Live shard placement</span>
+            </div>
+            <div id="vehicleShardWrap" class="table-wrap"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>System Log</h3>
+              <span class="sub">Frontend event stream</span>
+            </div>
+            <div id="activityLog" class="activity-log"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="chain" class="section">
+        <div class="grid two-col">
+          <div class="card">
+            <div class="card-header">
+              <h3>Blockchain Summary</h3>
+              <span class="sub">Per-shard ledger snapshot</span>
+            </div>
+            <div id="chainSummary" class="kv-list"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Full Chain Data</h3>
+              <span class="sub">Raw /api/chain response</span>
+            </div>
+            <pre id="chainResult" class="code-box">No chain data yet.</pre>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
