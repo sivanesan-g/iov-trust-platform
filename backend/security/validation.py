@@ -16,7 +16,7 @@ def validate_telemetry(payload: dict):
     if not isinstance(payload, dict):
         return False, {"code": "INVALID_PAYLOAD", "message": "Payload must be a JSON object"}
 
-    required_top_level = ["vehicle_id", "message_id", "sequence", "timestamp", "features"]
+    required_top_level = ["vehicle_id", "message_id", "sequence", "features"]
     missing_top = [name for name in required_top_level if name not in payload]
     if missing_top:
         return False, {"code": "MISSING_REQUIRED_FIELDS", "message": f"Missing fields: {missing_top}"}
@@ -33,16 +33,18 @@ def validate_telemetry(payload: dict):
     if not isinstance(sequence, int) or sequence < 1:
         return False, {"code": "INVALID_SEQUENCE", "message": "sequence must be a positive integer"}
 
-    timestamp = payload.get("timestamp")
-    if not is_finite_number(timestamp):
-        return False, {"code": "INVALID_TIMESTAMP", "message": "timestamp must be a finite number"}
-
     now = datetime.now(timezone.utc).timestamp()
-    ts = float(timestamp)
-    if abs(ts - now) > MAX_FUTURE_SKEW_SECONDS and ts > now + MAX_FUTURE_SKEW_SECONDS:
-        return False, {"code": "FUTURE_TIMESTAMP", "message": "timestamp exceeds allowed clock skew"}
-    if now - ts > MAX_MESSAGE_AGE_SECONDS:
-        return False, {"code": "STALE_MESSAGE", "message": "timestamp is too old"}
+    timestamp = payload.get("timestamp")
+    if timestamp is None:
+        ts = now
+    else:
+        if not is_finite_number(timestamp):
+            return False, {"code": "INVALID_TIMESTAMP", "message": "timestamp must be a finite number"}
+        ts = float(timestamp)
+        if ts > now + MAX_FUTURE_SKEW_SECONDS:
+            return False, {"code": "FUTURE_TIMESTAMP", "message": "timestamp exceeds allowed clock skew"}
+        if now - ts > MAX_MESSAGE_AGE_SECONDS:
+            return False, {"code": "STALE_MESSAGE", "message": "timestamp is too old"}
 
     features = payload.get("features")
     if not isinstance(features, dict):
