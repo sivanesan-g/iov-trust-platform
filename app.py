@@ -5,7 +5,7 @@ from pathlib import Path
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
-from backend.config import SHARD_COUNT
+from backend.config import DEFAULT_MODEL_PATH, DEFAULT_SCALER_PATH, SHARD_COUNT
 from backend.security.rate_limit import RateLimiter
 from backend.security.replay import ReplayGuard
 from backend.security.validation import validate_telemetry
@@ -45,16 +45,15 @@ def dashboard_static(filename):
 
 @app.route("/api/health", methods=["GET"])
 def health():
-    sample_payload = {"posx": 0.0, "posy": 0.0, "posz": 0.0, "spdx": 0.0, "spdy": 0.0, "spdz": 0.0, "aclx": 0.0, "acly": 0.0, "aclz": 0.0, "hedx": 0.0, "hedy": 0.0, "hedz": 0.0}
-    prediction = predict_state(sample_payload)
-    model_state = "loaded" if prediction.get("class_id") != -1 else "degraded"
+    model_state = "loaded" if DEFAULT_MODEL_PATH.exists() else "degraded"
+    scaler_state = "loaded" if DEFAULT_SCALER_PATH.exists() else "missing"
     compat = {
-        "status": "healthy" if model_state == "loaded" else "degraded",
+        "status": "healthy" if model_state == "loaded" and scaler_state == "loaded" else "degraded",
         "database": "healthy",
         "model": model_state,
-        "scaler": "loaded",
+        "scaler": scaler_state,
         "mqtt": "connected",
-        "missing_artifacts": ["models/classifier.pkl"] if model_state == "degraded" else [],
+        "missing_artifacts": [name for name, exists in {"models/classifier.pkl": DEFAULT_MODEL_PATH.exists(), "models/state_scaler.pkl": DEFAULT_SCALER_PATH.exists()}.items() if not exists],
         "message": "Production classifier not present; using degraded runtime until a real classifier artifact is added." if model_state == "degraded" else "All required runtime components are available.",
     }
     return jsonify(compat)
