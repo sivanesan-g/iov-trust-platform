@@ -1,15 +1,31 @@
 services:
   - type: web
     name: iov-trust-api
-    runtime: python
+    runtime: docker
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     healthCheckPath: /api/healthz
     envVars:
       - key: APP_ENV
         value: production
       - key: PORT
         value: 10000
+      - key: DATABASE_URL
+        sync: false
+      - key: MQTT_HOST
+        sync: false
+      - key: MQTT_PORT
+        value: 1883
+      - key: ETH_RPC_URL
+        sync: false
+      - key: ETH_CHAIN_ID
+        value: 11155111
+      - key: ETH_ACCOUNT
+        sync: false
+      - key: ETH_PRIVATE_KEY
+        sync: false
+      - key: ETH_CONTRACT_ADDRESS
+        sync: false
       - key: JWT_SECRET
         generateValue: true
