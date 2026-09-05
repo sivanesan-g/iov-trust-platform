@@ -9,7 +9,7 @@ load_dotenv(BASE_DIR / ".env")
 
 MODELS_DIR = BASE_DIR / "models"
 TRAINING_MODELS_DIR = BASE_DIR / "training_models" / "latest"
-DEFAULT_MODEL_PATH = MODELS_DIR / "classifier.pkl"
+DEFAULT_MODEL_PATH = MODELS_DIR / "classifier.pt"
 DEFAULT_SCALER_PATH = MODELS_DIR / "state_scaler.pkl"
 LEGACY_MODEL_PATH = TRAINING_MODELS_DIR / "ddqn_trust_agent.pt"
 LEGACY_SCALER_PATH = TRAINING_MODELS_DIR / "state_scaler.pkl"
