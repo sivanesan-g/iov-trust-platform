@@ -34,7 +34,7 @@ JWT_SECRET={secrets.token_urlsafe(32)}
     print(f"Created {ENV_PATH}")
     print(f"ETH_ACCOUNT={account.address}")
     print("ETH_PRIVATE_KEY was written only to .env.local")
-    print("Add Sepolia test ETH to this address before deploying or sending transactions.")
+    print("Add Sepolia test ETH to this address before sending transactions.")
     print("Add ETH_RPC_URL and ETH_CONTRACT_ADDRESS when available.")
 
 
