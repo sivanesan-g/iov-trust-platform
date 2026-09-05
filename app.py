@@ -147,10 +147,28 @@ def predictions(vehicle_id):
 
 @app.route("/api/shards", methods=["GET"])
 def shards():
+    metrics = sharding.metrics()
     payload = []
     for shard_id, vehicles in sharding.shards.items():
         payload.append({"id": shard_id, "vehicles": len(vehicles), "validator": validator_engine.select_validator(vehicles) or shard_id})
-    return jsonify({"shards": payload})
+    return jsonify({**metrics, "shards": payload})
+
+
+@app.route("/api/architecture", methods=["GET"])
+def architecture():
+    return jsonify({
+        "ingestion": "HTTP /api/predict and MQTT",
+        "inference": "12-feature scaler and configured classifier",
+        "trust": "Stateful trust scoring",
+        "sharding": f"{SHARD_COUNT} adaptive shards",
+        "ledger": "Local sharded ledger",
+        "ethereum": "Optional Sepolia TrustRegistry integration",
+    })
+
+
+@app.route("/api/chain", methods=["GET"])
+def chain():
+    return jsonify(ledger.export())
 
 
 @app.route("/api/ledger", methods=["GET"])
