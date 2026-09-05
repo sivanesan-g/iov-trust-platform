@@ -94,9 +94,14 @@ docker compose up --build
 
 ## Free cloud and blockchain setup
 
-The repository includes `render.yaml` for a free Render web service. In Render,
-create the service from the repository and provide the secret environment values
-marked with `sync: false`. Render supplies the public `PORT` value at runtime.
+The repository includes `render.yaml` for a free Render web service. The service
+can be deployed without external credentials: it uses SQLite by default and
+keeps Ethereum disabled until Sepolia values are supplied. Render supplies the
+public `PORT` value at runtime.
+
+SQLite on a free web service is temporary storage and may reset after restarts.
+Add a hosted PostgreSQL `DATABASE_URL` later when persistent cloud storage is
+needed.
 
 For a free blockchain test environment, use Ethereum Sepolia. Deploy
 `contracts/TrustRegistry.sol` to Sepolia, then configure:
@@ -113,10 +118,10 @@ Use test ETH only. Never place a mainnet private key in Render, `.env`, or the
 repository. The service accepts `ETH_CONTRACT_ADDRESS` and the legacy
 `TRUST_CONTRACT_ADDRESS` name.
 
-Neon or another hosted PostgreSQL provider can supply `DATABASE_URL`. The local
-Docker stack continues to use Postgres and Mosquitto; a hosted MQTT broker is
-needed if the cloud deployment must receive MQTT traffic, because `localhost`
-and the Docker `mqtt` hostname are not reachable from Render.
+Neon or another hosted PostgreSQL provider can optionally supply `DATABASE_URL`.
+The local Docker stack continues to use Postgres and Mosquitto; a hosted MQTT
+broker is needed if the cloud deployment must receive MQTT traffic, because
+`localhost` and the Docker `mqtt` hostname are not reachable from Render.
 
 ## Testing
 

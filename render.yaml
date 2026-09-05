@@ -11,21 +11,5 @@ services:
         value: production
       - key: PORT
         value: 10000
-      - key: DATABASE_URL
-        sync: false
-      - key: MQTT_HOST
-        sync: false
-      - key: MQTT_PORT
-        value: 1883
-      - key: ETH_RPC_URL
-        sync: false
-      - key: ETH_CHAIN_ID
-        value: 11155111
-      - key: ETH_ACCOUNT
-        sync: false
-      - key: ETH_PRIVATE_KEY
-        sync: false
-      - key: ETH_CONTRACT_ADDRESS
-        sync: false
       - key: JWT_SECRET
         generateValue: true
