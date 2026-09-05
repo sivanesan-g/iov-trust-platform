@@ -1,5 +1,9 @@
+const savedApiBase = localStorage.getItem('iovApiBase');
+const isHostedPage = !['localhost', '127.0.0.1'].includes(window.location.hostname);
+const usesLocalApi = savedApiBase && /127\.0\.0\.1|localhost/.test(savedApiBase);
+
 const state = {
-  apiBase: localStorage.getItem('iovApiBase') || 'http://127.0.0.1:5000',
+  apiBase: savedApiBase && !(isHostedPage && usesLocalApi) ? savedApiBase : window.location.origin,
   latestPrediction: null
 };
 
