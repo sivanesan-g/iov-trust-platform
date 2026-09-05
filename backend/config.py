@@ -3,9 +3,10 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv()
-
 BASE_DIR = Path(__file__).resolve().parents[1]
+load_dotenv(BASE_DIR / ".env.local")
+load_dotenv(BASE_DIR / ".env")
+
 MODELS_DIR = BASE_DIR / "models"
 TRAINING_MODELS_DIR = BASE_DIR / "training_models" / "latest"
 DEFAULT_MODEL_PATH = MODELS_DIR / "classifier.pkl"
